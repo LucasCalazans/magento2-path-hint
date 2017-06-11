@@ -1,0 +1,27 @@
+#########################################################
+#
+# @author      Webjump Core Team <dev@webjump.com.br>
+# @copyright   2017 Webjump (http://www.webjump.com.br)
+# @license     http://www.webjump.com.br  Copyright
+# 
+# @link        http://www.webjump.com.br
+#
+#########################################################
+
+machine:
+  php:
+    version: 7.0.7
+
+dependencies:
+  pre:
+    - mkdir -p ~/.composer && echo '{"github-oauth":{"github.com":"'$GITHUB_TOKEN'"},"http-basic":{"repo.magento.com":{"username":"'$REPO_MAGENTO_USERNAME'","password":"'$REPO_MAGENTO_PASSWORD'"}}}' > ~/.composer/auth.json
+
+test:
+  override:
+    - mkdir -p $CIRCLE_TEST_REPORTS/phpunit
+    - mkdir =p $CIRCLE_ARTIFACTS/logs
+    - vendor/bin/phpmd ./ xml phpmd.xml.dist > $CIRCLE_ARTIFACTS/logs/phpmd.xml
+    - vendor/bin/phpcpd ./ --exclude=vendor/ --exclude=Test/ --log-pmd=$CIRCLE_ARTIFACTS/logs/phpcpd.xml
+    - vendor/bin/phpcs ./ --report=checkstyle --report-file=$CIRCLE_ARTIFACTS/logs/checkstyle.xml
+    - vendor/bin/phpunit --coverage-text --coverage-html $CIRCLE_ARTIFACTS/html/ --coverage-clover $CIRCLE_ARTIFACTS/logs/clover.xml --log-junit $CIRCLE_TEST_REPORTS/phpunit/junit.xml
+    - vendor/bin/coverage-check $CIRCLE_ARTIFACTS/logs/clover.xml 80
