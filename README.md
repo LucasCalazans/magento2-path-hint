@@ -13,4 +13,5 @@ To install the module is just you run the follow command:
 
 ```
 $ composer require lucas-calazans/module-path-hint
+$ bin/magento module:enable LucasCalazans_PathHint
 ```
