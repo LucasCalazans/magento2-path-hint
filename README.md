@@ -3,9 +3,13 @@ Enable path hint with the get param "enablepath"
 
 > http://magento2.dev/customer/account?enablepath
 
+![](path-hint.gif)
+
 If you want the block's name put enablepath=1
 
 > http://magento2.dev/customer/account?enablepath=1
+
+![](path-hint-block.gif)
 
 # Installation
 
